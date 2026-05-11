@@ -212,5 +212,4 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 # telegrambot
-# telegrambot</content>
-<parameter name="filePath">/home/laptop/Code/Python/pbot/bot.py
+# telegrambot
