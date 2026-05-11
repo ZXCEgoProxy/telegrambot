@@ -39,6 +39,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # ---------- Инициализация бота и диспетчера ----------
@@ -222,19 +223,7 @@ async def process_reason(message: types.Message, state: FSMContext):
             await state.clear()
             return
 
-    # Автоматически создаём пригласительную ссылку и сохраняем в БД
-    invite_link = await create_invite_for_user(user_id)
-    if invite_link:
-        async with await get_db() as db:
-            await db.execute("UPDATE applications SET invite_link = ? WHERE user_id = ?", (invite_link, user_id))
-            await db.commit()
-        await send_invite_to_user(user_id, invite_link)
-    else:
-        # если ссылка не создалась и статической нет
-        logger.error(f"Не удалось получить пригласительную ссылку для user_id={user_id}")
-        await message.answer("❌ Произошла ошибка при создании приглашения. Администратор свяжется с вами вручную.")
-
-    await message.answer("✅ Заявка принята! Приглашение отправлено вам в личные сообщения.")
+    await message.answer("✅ Заявка принята! Ожидайте решения администратора.")
     await state.clear()
 
 # ---------- Административные команды ----------
